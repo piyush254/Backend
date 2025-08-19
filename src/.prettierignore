@@ -1,0 +1,28 @@
+# Ignore dependencies
+node_modules
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Ignore build output
+build
+dist
+.next
+out
+coverage
+
+# Ignore environment & config
+.env
+.env.*
+*.log
+
+# Ignore lock and cache files
+*.cache
+*.tmp
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore specific project files
+public/*.html
