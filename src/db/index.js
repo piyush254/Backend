@@ -6,10 +6,8 @@ import dotenv from 'dotenv'
 dotenv.config({
   path:  "../env"
 })
-
-
 const DBCONNECT = async function () {
-  console.log(`${process.env.MONGODB_URL}/${DB_NAME}`)
+  // console.log(`${process.env.MONGODB_URL}/${DB_NAME}`)
   try {
     await mongoose.connect(`${process.env.MONGODB_URL}/${DB_NAME}`);
 
@@ -18,12 +16,9 @@ const DBCONNECT = async function () {
       console.log("Error", error);
       throw error;
     });
-
-    app.listen(process.env.PORT, () => {
-      console.log(`✅ App is listening on port ${process.env.PORT}`);
-    });
   } catch (error) {
     console.error("❌ Error :::::::::", error);
+    process.exit(1);
   }
 };
 export default DBCONNECT;

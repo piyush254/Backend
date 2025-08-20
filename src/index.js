@@ -8,7 +8,7 @@
 // const app = express();
 // console.log("envs", process.env.MONGOBD_URL);
 
-// ;( async ()=>{ 
+// ;( async ()=>{
 
 //   try{
 //     await mongoose.connect(`${process.env.MONGOBD_URL}/${DB_NAME}`)
@@ -29,12 +29,25 @@
 
 import mongoose from "mongoose";
 import { DB_NAME } from "./constants.js";
-import express from 'express'
-import dotenv from 'dotenv'
+import express from "express";
+const app = express();
+import dotenv from "dotenv";
 dotenv.config({
-  path:  "./env"
-})
-import DBCONNECT from "./db/index.js"
-DBCONNECT();
-console.log("index page");
-console.log(`on index page :::  ${process.env.MONGODB_URL}/${DB_NAME}`)
+  path: "./env",
+});
+
+
+import DBCONNECT from "./db/index.js";
+DBCONNECT()
+  .then(
+    app.listen(process.env.PORT  || 8000 , () => {
+      console.log(`✅ App is listening on port ${process.env.PORT}`);
+    }),
+    app.on("error", (error) => {
+      console.error("❌ Server error:", error);
+      throw error;
+    })
+  )
+  .catch((error) => {
+    console.error("MONGODB connection Error", error);
+  });
