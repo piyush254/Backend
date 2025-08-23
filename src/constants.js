@@ -1,1 +1,1 @@
-export const DB_NAME = "practicenode"
+export const DB_NAME = "sample_mflix"
