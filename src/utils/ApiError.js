@@ -1,23 +1,33 @@
-class ApiError extends Error{
+class ApiError extends Error {
   constructor(
     statusCode,
     message = "Something went wrong",
     errors = [],
     stack = ""
-  ){
+  ) {
     super(message);
-    this.statusCode = statusCode
-    this.data = null 
-    this.message = message
-    this.errors = errors
+    this.statusCode = statusCode;
+    this.data = null;
+    this.message = message;
+    this.errors = errors;
 
-    if(stack){
-      this.stack = stack
-    }  else{
-      Error.captureStackTrace(this, this.constructors);
+    if (stack) {
+      this.stack = stack;
+    } else {
+      Error.captureStackTrace(this, this.constructor);
     }
+  }
 
+  // ✅ Define a JSON structure
+  toJSON() {
+    return {
+      success: false,
+      statusCode: this.statusCode,
+      message: this.message,
+      errors: this.errors,
+      stack: process.env.NODE_ENV === "development" ? this.stack : undefined,
+    };
   }
 }
 
-export {ApiError}
+export { ApiError };
