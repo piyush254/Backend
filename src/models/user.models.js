@@ -56,10 +56,17 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.method.isPasswordCorrect = async function (password) {
-  await bcrypt.compare(password, this.password);
-};
-userSchema.method.gernateAccessToken = function () {
+// userSchema.methods.isPasswordCorrect = async function (password) {
+//   console.log(password);
+//   return await bcrypt.compare(password, this.password);
+// };
+
+
+userSchema.methods.isPasswordCorrect = async function(password){
+    console.log("password :::" , password);
+    return await bcrypt.compare(password, this.password)
+}
+userSchema.methods.gernateAccessToken = function () {
   return jwt.sign(
     {
       _id: this._id,
@@ -73,7 +80,7 @@ userSchema.method.gernateAccessToken = function () {
     }
   );
 };
-userSchema.method.gernateRefreshToken = function () {
+userSchema.methods.gernateRefreshToken = function () {
   return jwt.sign(
     {
       _id: this._id,

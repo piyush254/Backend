@@ -5,10 +5,16 @@ import { uploadCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 const gernateAccessAndRefreshToken = async (userID) => {
+  console.log("userID  :::", userID);
   try {
-    const user = User.findOne(userID);
+    const user = await User.findOne(userID);
     const accessToken = user.gernateAccessToken();
     const refreshToken = user.gernateRefreshToken();
+    console.log("🔑 Tokens Generated:", {
+      accessToken,
+      refreshToken,
+    });
+
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
     return { accessToken, refreshToken };
@@ -88,34 +94,36 @@ const registerUser = asyncHandler(async (req, resp) => {
 
 const loginUser = asyncHandler(async (req, resp) => {
   const { email, userName, password } = req.body;
-  if (!userName || !email) {
+  if (!(userName || email)) {
     return new ApiError(400, "Email or username is required");
   }
-  const user = User.findOne({
+  const user = await User.findOne({
     $or: [{ userName }, { email }],
   });
   if (!user) {
     return new ApiError(404, "Profile doesnot exists");
   }
-  const isPasswordValid = user.isPasswordCorrect(password);
+  // console.log("user ::" , user);
+  const isPasswordValid = await user.isPasswordCorrect(password);
   if (!isPasswordValid) {
     return new ApiError(404, "Password is incorrect");
   }
   const { accessToken, refreshToken } = await gernateAccessAndRefreshToken(
     user._id
   );
-  const logginedUser = User.findById(user._id).select(
+
+  const logginedUser = await User.findById(user._id).select(
     "-password -refreshToken"
   );
   const options = {
     httpOnly: true,
     secure: true,
   };
-
+  // console.log("logginedUser   ::::" , logginedUser);
   return resp
     .status(200)
-    .coockie("accessToken", accessToken, options)
-    .coockie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
     .json(
       new ApiResponse(
         200,

@@ -45,14 +45,14 @@ app.use((err, req, res, next) => {
 });
 
 
-app.use("/", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "👋 Welcome Developer! Your backend server is running smoothly 🚀",
-    docs: "http://localhost:8000/api-docs", // (optional if you add docs later)
-    status: "✅ OK"
-  });
-});
+// app.use("/", (req, res) => {
+//   res.status(200).json({
+//     success: true,
+//     message: "👋 Welcome Developer! Your backend server is running smoothly 🚀",
+//     docs: "http://localhost:8000/api-docs", // (optional if you add docs later)
+//     status: "✅ OK"
+//   });
+// });
 
 
 export { app };
