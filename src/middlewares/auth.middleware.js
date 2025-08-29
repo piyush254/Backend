@@ -4,6 +4,7 @@ import { asyncHandler } from "../utils/asyncHandlerHelper.js"
 import { User } from "../models/user.models.js"
 
 export const verifyJwt = asyncHandler((req ,_ ,next) => {
+  console.log("req.cookies::",req.cookies)
 try {
     const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
     if(!token) throw new ApiError(401 ,"Unauthorised user");
